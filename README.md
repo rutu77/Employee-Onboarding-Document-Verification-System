@@ -16,3 +16,16 @@ This system enables:
 - User-Friendly Web Interface
 - Secure file storage
 - Error Handling & Logging
+- 
+## Technologies Used
+- Python 3.x
+- Flask (Web Framework)
+- Web3 (Blockchain Integration)
+- Google Generative AI
+- SQLite (Database)
+- HTML/CSS/JavaScript
+
+## Additional Enhancements
+- Email Notifications: Notify employees about their onboarding status via email.
+- Admin Dashboard: A dashboard to view onboarding metrics and track progress.
+- Integration with HR Systems: Sync with existing HR tools or databases for seamless onboarding.
