@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Onboarding Document Verification</title>
+    <!-- favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.jpg') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            min-height: calc(100vh - 56px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding: 4rem 0;
+        }
+
+        .headline {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #4a90e2 0%, #357abd 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .subheadline {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #4a90e2;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        .action-btn {
+            padding: 0.75rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.5rem;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary-custom:hover {
+            background: linear-gradient(135deg, #357abd 0%, #2c5282 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+            color: white;
+        }
+
+        .btn-outline-custom {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-outline-custom:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .headline {
+                font-size: 2.5rem;
+            }
+            
+            .subheadline {
+                font-size: 1.1rem;
+            }
+            
+            .hero-content {
+                padding: 2rem 0;
+            }
+        }
+    </style>
+</head>
+<body data-aos-easing="ease" data-aos-duration="1000" data-aos-delay="0">
+    <div class="loader-wraper" style="display: none;">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+
+    <section class="hero-section d-flex align-items-center">
+        <div class="container hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-7 mb-5 mb-lg-0">
+                    <h1 class="headline mb-4">
+                        Employee Onboarding 
+                        <span class="highlight">Document Verification</span>
+                    </h1>
+                    <p class="subheadline">
+                        Streamline your employee onboarding process with our secure blockchain-based document verification system. Fast, reliable, and AI-powered.
+                    </p>
+                    <div class="d-flex flex-wrap">
+                        <a href="/upload_details" class="action-btn btn-primary-custom">
+                            <i class="fas fa-upload me-2"></i>Upload Document
+                        </a>
+                        <a href="/verify" class="action-btn btn-outline-custom">
+                            <i class="fas fa-shield-alt me-2"></i>Verify Document
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <i class="fas fa-lock feature-icon"></i>
+                                <h3 class="feature-title">Secure & Immutable</h3>
+                                <p class="feature-text">Blockchain-backed verification ensures tamper-proof document security.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <i class="fas fa-robot feature-icon"></i>
+                                <h3 class="feature-title">AI-Powered</h3>
+                                <p class="feature-text">Advanced AI technology for automated document processing.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <i class="fas fa-bolt feature-icon"></i>
+                                <h3 class="feature-title">Fast & Efficient</h3>
+                                <p class="feature-text">Quick verification process with real-time status updates.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <i class="fas fa-chart-line feature-icon"></i>
+                                <h3 class="feature-title">Scalable</h3>
+                                <p class="feature-text">Built to handle growing verification needs efficiently.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

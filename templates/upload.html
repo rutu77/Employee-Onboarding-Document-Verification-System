@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Document{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Upload Document for Verification</h2>
+                    
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Choose File (PDF/Image)</label>
+                            <input type="file" class="form-control" id="file" name="file" accept=".pdf,.jpg,.jpeg,.png" required>
+                            <small class="text-muted">Upload a document containing participant information</small>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Upload Document</button>
+                    </form>
+                    
+                    <div id="uploadProgress" class="progress mt-3" style="display: none;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    
+                    <div id="transactionStatus" class="alert mt-3" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const formData = new FormData(form);
+    const progress = document.getElementById('uploadProgress');
+    const progressBar = progress.querySelector('.progress-bar');
+    const status = document.getElementById('transactionStatus');
+    
+    try {
+        // Show progress
+        progress.style.display = 'block';
+        progressBar.style.width = '30%';
+        status.style.display = 'block';
+        status.className = 'alert alert-info';
+        status.textContent = 'Extracting participant information...';
+        
+        const response = await fetch('/upload_data', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            progressBar.style.width = '100%';
+            status.className = 'alert alert-success';
+            status.innerHTML = `
+                <h5>✅ Success!</h5>
+                <p>${result.message}</p>
+                <p><strong>Extracted Name:</strong> ${result.participant_name}</p>
+                <p><strong>Transaction Hash:</strong> <small>${result.transaction_hash}</small></p>
+            `;
+        } else {
+            throw new Error(result.error || 'Upload failed');
+        }
+    } catch (error) {
+        progressBar.style.width = '100%';
+        progressBar.className = 'progress-bar bg-danger';
+        status.className = 'alert alert-danger';
+        status.innerHTML = `
+            <h5>❌ Error</h5>
+            <p>${error.message}</p>
+        `;
+    }
+});
+</script>
+{% endblock %}

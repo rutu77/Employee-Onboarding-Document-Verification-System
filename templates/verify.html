@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Document{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card custom-card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Document Verification</h2>
+                
+                <form id="verifyForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Document to Verify</label>
+                        <input type="file" class="form-control" id="file" name="file" required 
+                               accept=".jpg,.jpeg,.png,.pdf">
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Upload the document to verify. The system will automatically extract participant information.
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-shield-alt me-2"></i>Verify Document
+                    </button>
+                </form>
+                
+                <div id="verificationProgress" class="progress mt-3" style="display: none;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"></div>
+                </div>
+                
+                <div id="verificationResult" class="alert mt-3" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('verifyForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const formData = new FormData(form);
+    const progress = document.getElementById('verificationProgress');
+    const progressBar = progress.querySelector('.progress-bar');
+    const result = document.getElementById('verificationResult');
+    
+    try {
+        // Show progress
+        progress.style.display = 'block';
+        progressBar.style.width = '30%';
+        result.style.display = 'block';
+        result.className = 'alert alert-info';
+        result.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Extracting participant information...';
+        
+        const response = await fetch('/verify_document', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        progressBar.style.width = '100%';
+        
+        if (response.ok) {
+            result.className = 'alert alert-success';
+            result.innerHTML = `
+                <h5 class="mb-3"><i class="fas fa-check-circle me-2"></i>Verification Result</h5>
+                <div class="mb-3">
+                    <strong><i class="fas fa-user me-2"></i>Extracted Name:</strong>
+                    <span class="ms-2">${data.extracted_name}</span>
+                </div>
+                <p class="mb-3">${data.message}</p>
+                ${data.transaction_hash ? `
+                    <div class="mb-2">
+                        <strong><i class="fas fa-link me-2"></i>Transaction Hash:</strong>
+                        <div class="text-break">
+                            <small class="text-muted">${data.transaction_hash}</small>
+                        </div>
+                    </div>
+                ` : ''}
+                ${data.stored_hash ? `
+                    <div>
+                        <strong><i class="fas fa-fingerprint me-2"></i>Document Hash:</strong>
+                        <div class="text-break">
+                            <small class="text-muted">${data.stored_hash}</small>
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+        } else {
+            result.className = 'alert alert-danger';
+            result.innerHTML = `
+                <h5 class="mb-3"><i class="fas fa-exclamation-circle me-2"></i>Verification Failed</h5>
+                ${data.extracted_name ? `
+                    <div class="mb-3">
+                        <strong><i class="fas fa-user me-2"></i>Extracted Name:</strong>
+                        <span class="ms-2">${data.extracted_name}</span>
+                    </div>
+                ` : ''}
+                <p class="mb-0">${data.message || 'An error occurred during verification'}</p>
+            `;
+        }
+    } catch (error) {
+        progressBar.style.width = '100%';
+        progressBar.className = 'progress-bar bg-danger';
+        result.className = 'alert alert-danger';
+        result.innerHTML = `
+            <h5 class="mb-3"><i class="fas fa-exclamation-circle me-2"></i>Error</h5>
+            <p class="mb-0">${error.message || 'An unexpected error occurred'}</p>
+        `;
+    }
+});
+</script>
+{% endblock %}
