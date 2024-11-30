@@ -9,3 +9,10 @@ This system enables:
 * A web interface for HR teams to manage employee documents efficiently.
 * Comprehensive tracking and logging of all onboarding activities.
 
+## Features
+- Document Verification
+- Blockchain Integration
+- AI-Powered Information Extraction
+- User-Friendly Web Interface
+- Secure file storage
+- Error Handling & Logging
